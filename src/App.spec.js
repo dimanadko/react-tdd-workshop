@@ -25,6 +25,24 @@ test('should show "O" after second player clicks', () => {
   expect(driver.getACellAt(1)).toBe('O');
 });
 
+test('should hide table before registration', () => {
+  const p1Name = 'Yaniv';
+  const p2Name = 'Computer';
+  const wrapper = driver.render(<App />);
+  expect(wrapper.find('[data-hook="cell"]')).toNotExist;
+  driver.newGame(p1Name, p2Name);
+  expect(wrapper.find('[data-hook="cell"]')).toExist;
+});
+
+test('should hide registration form after the game has started', () => {
+  const p1Name = 'Yaniv';
+  const p2Name = 'Computer';
+  const wrapper = driver.render(<App />);
+  expect(wrapper.find('[data-hook="new-game"]')).toExist;
+  driver.newGame(p1Name, p2Name);
+  expect(wrapper.find('[data-hook="new-game"]')).toNotExist;
+});
+
 test('"O" should win the game', () => {
   const p1Name = 'Yaniv';
   const p2Name = 'Computer';
