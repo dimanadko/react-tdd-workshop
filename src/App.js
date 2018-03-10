@@ -37,27 +37,30 @@ class App extends React.Component {
   saveGame = () => {
     localStorage.setItem('board', JSON.stringify(this.state.board));
     localStorage.setItem('currentPlayer', this.state.currentPlayer);
+    localStorage.setItem('p1Name', this.state.p1Name);
+    localStorage.setItem('p2Name', this.state.p2Name);
   };
   loadGame = () => {
-    this.setState({ board: JSON.parse(localStorage.getItem('board')) });
-    this.setState({ currentPlayer: localStorage.getItem('currentPlayer') });
+    this.setState({
+      board: JSON.parse(localStorage.getItem('board')),
+      currentPlayer: localStorage.getItem('currentPlayer'),
+      p1Name: localStorage.getItem('p1Name'),
+      p2Name: localStorage.getItem('p2Name'),
+    });
   };
   render() {
     const { p1Name, p2Name } = this.state;
     return (
-      <div className="App">
+      <div data-hook="root" className="App" currentplayer={this.state.currentPlayer}>
         {p1Name || p2Name ? (
           <Fragment>
             <Game
+              currentPlayer={this.currentPlayer}
               onCellClicked={this.handleCellClick}
               board={this.state.board}
               p1Name={this.state.p1Name}
               p2Name={this.state.p2Name}
             />
-            <div>
-              <button onClick={this.saveGame}>Save</button>
-              <button onClick={this.loadGame}>Load</button>
-            </div>
           </Fragment>
         ) : (
           <Registration onNewGame={this.onNewGame} />
@@ -69,6 +72,14 @@ class App extends React.Component {
               : `${this.state.winner === 'X' ? this.state.p1Name : this.state.p2Name} won!`}
           </div>
         )}
+        <div>
+          <button data-hook="save" onClick={this.saveGame}>
+            Save
+          </button>
+          <button data-hook="load" onClick={this.loadGame}>
+            Load
+          </button>
+        </div>
       </div>
     );
   }
