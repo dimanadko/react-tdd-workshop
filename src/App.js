@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Registration from './Registration';
 import Game from './Game';
 import { gameStatus } from './gameService';
@@ -33,17 +33,32 @@ class App extends React.Component {
       this.setState({ board, currentPlayer: nextPlayer });
     }
   };
+
+  saveGame = () => {
+    localStorage.setItem('board', JSON.stringify(this.state.board));
+    localStorage.setItem('currentPlayer', this.state.currentPlayer);
+  };
+  loadGame = () => {
+    this.setState({ board: JSON.parse(localStorage.getItem('board')) });
+    this.setState({ currentPlayer: localStorage.getItem('currentPlayer') });
+  };
   render() {
     const { p1Name, p2Name } = this.state;
     return (
       <div className="App">
         {p1Name || p2Name ? (
-          <Game
-            onCellClicked={this.handleCellClick}
-            board={this.state.board}
-            p1Name={this.state.p1Name}
-            p2Name={this.state.p2Name}
-          />
+          <Fragment>
+            <Game
+              onCellClicked={this.handleCellClick}
+              board={this.state.board}
+              p1Name={this.state.p1Name}
+              p2Name={this.state.p2Name}
+            />
+            <div>
+              <button onClick={this.saveGame}>Save</button>
+              <button onClick={this.loadGame}>Load</button>
+            </div>
+          </Fragment>
         ) : (
           <Registration onNewGame={this.onNewGame} />
         )}
